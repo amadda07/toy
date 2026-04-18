@@ -26,7 +26,7 @@ export const experiences = [
   {
     company: '디케이테크인',
     period: '2022.12 ~ 재직중',
-    duration: '3년 4개월+',
+    duration: '3년 5개월+',
     role: 'AX개발팀 사원',
     color: '#06b6d4',
     projects: [
