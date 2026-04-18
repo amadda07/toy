@@ -1,16 +1,28 @@
 plugins {
     id 'java'
+    id 'org.springframework.boot' version '3.2.4'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'com.jayho'
 version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:6.0.0')
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation platform('org.junit:junit-bom:5.10.2')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
@@ -18,3 +30,15 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+task buildFrontend(type: Exec) {
+    workingDir 'frontend'
+    commandLine 'npm', 'run', 'build'
+}
+
+task copyFrontend(type: Copy, dependsOn: buildFrontend) {
+    from 'frontend/dist'
+    into 'src/main/resources/static'
+}
+
+processResources.dependsOn copyFrontend
